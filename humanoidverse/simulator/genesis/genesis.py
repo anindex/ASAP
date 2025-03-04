@@ -256,13 +256,7 @@ class Genesis(BaseSimulator):
         self.dof_pos = self.robot.get_dofs_position(self.dof_ids)
         self.dof_vel = self.robot.get_dofs_velocity(self.dof_ids)
 
-        self.contact_forces = torch.tensor(
-            self.robot.get_links_net_contact_force(),
-            device=self.device,
-            dtype=gs.tc_float,
-        )
-
-
+        self.contact_forces = self.robot.get_links_net_contact_force()
 
     def refresh_sim_tensors(self):
         """
@@ -291,11 +285,7 @@ class Genesis(BaseSimulator):
         self.dof_pos = self.robot.get_dofs_position(self.dof_ids)
         self.dof_vel = self.robot.get_dofs_velocity(self.dof_ids)
 
-        self.contact_forces = torch.tensor(
-            self.robot.get_links_net_contact_force(),
-            device=self.device,
-            dtype=gs.tc_float,
-        )
+        self.contact_forces = self.robot.get_links_net_contact_force()
         # import ipdb; ipdb.set_trace()
         self._rigid_body_pos = self.robot.get_links_pos()[:, self.link_mapping_genesis_to_humanoidverse_idx]
         self._rigid_body_rot = self.robot.get_links_quat()[:, self.link_mapping_genesis_to_humanoidverse_idx]  # (num_envs, 4) isaacsim uses wxyz, we keep xyzw for consistency

@@ -14,7 +14,7 @@ from loguru import logger
 
 
 
-from utils.config_utils import *  # noqa: E402, F403
+from humanoidverse.utils.config_utils import *  # noqa: E402, F403
 
 
 @hydra.main(config_path="config", config_name="base", version_base="1.1")
@@ -46,7 +46,7 @@ def main(config: OmegaConf):
 
     # have to import torch after isaacgym
     import torch  # noqa: E402
-    from utils.common import seeding
+    from humanoidverse.utils.common import seeding
     import wandb
     from humanoidverse.envs.base_task.base_task import BaseTask  # noqa: E402
     from humanoidverse.agents.base_algo.base_algo import BaseAlgo  # noqa: E402

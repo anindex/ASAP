@@ -96,8 +96,30 @@ class Genesis(BaseSimulator):
             #     gs.morphs.URDF(file='urdf/plane/plane.urdf', scale=20.0, fixed=True),
             # )
             plane = self.scene.add_entity(gs.morphs.Plane())
-        elif mesh_type == 'trimesh':
-            raise NotImplementedError(f"Mesh type {mesh_type} hasn't been implemented in genesis subclass.")
+        elif mesh_type == 'heightfield':
+            field_size = self.sim_cfg.terrain.field_size
+            heights_range = self.sim_cfg.terrain.heights_range
+            height_field = torch.rand(field_size, device=self.device)
+            height_field = heights_range[0] + (heights_range[1] - heights_range[0]) * height_field
+            terrain = self.scene.add_entity(
+                morph=gs.morphs.Terrain(
+                    horizontal_scale=self.sim_cfg.terrain.horizontal_scale,
+                    vertical_scale=self.sim_cfg.terrain.vertical_scale,
+                    height_field=height_field,
+                ),
+            )
+        elif mesh_type == 'preset':
+            terrain = self.scene.add_entity(
+                morph=gs.morphs.Terrain(
+                    n_subterrains=self.sim_cfg.terrain.n_subterrains,
+                    subterrain_size=self.sim_cfg.terrain.subterrain_size,
+                    horizontal_scale=self.sim_cfg.terrain.horizontal_scale,
+                    vertical_scale=self.sim_cfg.terrain.vertical_scale,
+                    subterrain_types=self.sim_cfg.terrain.subterrain_types,
+                ),
+            )
+        else:
+            raise ValueError(f"Invalid terrain mesh type: {mesh_type}")
 
     # ----- Robot Asset Setup Methods -----
 

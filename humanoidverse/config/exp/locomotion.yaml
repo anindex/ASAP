@@ -2,6 +2,6 @@
 
 defaults:
   - /algo: ppo
-  - /env: locomotion
+  - /env: locomotion_genesis
 
 experiment_name: TEST_Locomotion

@@ -66,12 +66,16 @@ class Genesis(BaseSimulator):
                 camera_lookat=(0.0, 0.0, 0.5),
                 camera_fov=40,
             ),
-            rigid_options=gs.options.RigidOptions(
-                enable_self_collision=True,
+            rigid_options=gs.options.RigidOptions(      
+                integrator=gs.integrator.implicitfast,
+                constraint_solver=gs.constraint_solver.Newton,
+                enable_collision=True,
+                # enable_self_collision=True,
+                enable_joint_limit=True,
             ),
-            # vis_options=gs.options.VisOptions(
-            #     n_rendered_envs=1,
-            # ),
+            vis_options=gs.options.VisOptions(
+                n_rendered_envs=1,
+            ),
             show_viewer=not self.headless,
             show_FPS=False,
         )
@@ -99,7 +103,7 @@ class Genesis(BaseSimulator):
         elif mesh_type == 'heightfield':
             field_size = self.sim_cfg.terrain.field_size
             heights_range = self.sim_cfg.terrain.heights_range
-            height_field = torch.rand(field_size, device=self.device)
+            height_field = torch.rand(field_size, device=self.device, dtype=gs.tc_float)
             height_field = heights_range[0] + (heights_range[1] - heights_range[0]) * height_field
             terrain = self.scene.add_entity(
                 morph=gs.morphs.Terrain(
@@ -133,11 +137,11 @@ class Genesis(BaseSimulator):
         init_quat_xyzw = self.robot_cfg.init_state.rot
         init_quat_wxyz = init_quat_xyzw[-1:] + init_quat_xyzw[:3]
         self.base_init_pos = torch.tensor(
-            self.robot_cfg.init_state.pos, device=self.device
+            self.robot_cfg.init_state.pos, device=self.device, dtype=gs.tc_float
         )
         # self.base_init_pos[2] += 1.5
         self.base_init_quat = torch.tensor(
-            init_quat_wxyz, device=self.device
+            init_quat_wxyz, device=self.device, dtype=gs.tc_float
         )
 
         asset_root = self.robot_cfg.asset.asset_root

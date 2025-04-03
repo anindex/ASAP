@@ -68,7 +68,7 @@ class Genesis(BaseSimulator):
             ),
             rigid_options=gs.options.RigidOptions(      
                 integrator=gs.integrator.implicitfast,
-                constraint_solver=gs.constraint_solver.Newton,
+                constraint_solver=gs.constraint_solver.CG,
                 enable_collision=True,
                 # enable_self_collision=True,
                 enable_joint_limit=True,
